@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FileSqueezer – Compress &amp; Decompress Files Seamlessly</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  :root {
+    --font-family: 'Poppins', sans-serif;
+    --bg-color: #ffffff;
+    --text-color: #374151;
+    --text-muted: #6b7280;
+    --primary-color: #111827;
+    --button-bg: #111827;
+    --button-hover-bg: #1e293b;
+    --button-text-color: #ffffff;
+    --border-radius: 0.75rem;
+    --shadow-light: 0 2px 8px rgba(0,0,0,0.05);
+    --spacing: 1.5rem;
+    --transition-speed: 0.3s;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    z-index: 1000;
+    user-select: none;
+  }
+
+  main {
+    max-width: 1200px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  @media (max-width: 850px) {
+    main {
+      grid-template-columns: 1fr;
+      margin: 1rem auto 3rem;
+    }
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+    font-weight: 800;
+    font-size: 3rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--primary-color);
+    text-align: center;
+  }
+
+  p.brand-tagline {
+    grid-column: 1 / -1;
+    font-size: 1.125rem;
+    margin: 0 0 3rem 0;
+    color: var(--text-muted);
+    text-align: center;
+    font-weight: 500;
+  }
+
+  section.card {
+    background: #f9fafb;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: monospace;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #d1d5db;
+    transition: border-color var(--transition-speed);
+    width: 100%;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.2);
+  }
+
+  input[type="file"] {
+    margin-top: 0.5rem;
+  }
+
+  button {
+    cursor: pointer;
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    align-self: flex-start;
+    transition: background-color var(--transition-speed), transform 0.2s ease;
+  }
+  button:hover, button:focus {
+    background-color: var(--button-hover-bg);
+    outline: none;
+    transform: scale(1.05);
+  }
+  button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .output-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .output-label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+  }
+
+  .footer-note {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 2rem;
+    user-select: none;
+  }
+
+  /* Screen reader only text */
+  .sr-only {
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    -webkit-clip-path: inset(50%) !important;
+            clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  FileSqueezer
+  <nav aria-label="Main navigation">
+    <a href="#compress-section" style="text-decoration:none; color: var(--primary-color); font-weight:600; margin-right:1rem;">Compress</a>
+    <a href="#decompress-section" style="text-decoration:none; color: var(--primary-color); font-weight:600;">Decompress</a>
+  </nav>
+</header>
+
+<main>
+  <h1>FileSqueezer</h1>
+  <p class="brand-tagline">Effortless compression and decompression for your files and text.</p>
+
+  <section id="compress-section" class="card" aria-labelledby="compress-label">
+    <h2 id="compress-label" style="margin-top:0;">Compress</h2>
+    <label for="text-to-compress">Enter text to compress</label>
+    <textarea id="text-to-compress" placeholder="Paste or type text here..."></textarea>
+
+    <label for="file-to-compress">Or select a file to compress (text files recommended)</label>
+    <input type="file" id="file-to-compress" accept="*/*" />
+
+    <button id="btn-compress" type="button" aria-describedby="compress-desc" disabled>Compress</button>
+    <span id="compress-desc" class="sr-only">Compress the entered text or selected file</span>
+
+    <div class="output-container" style="margin-top:1.5rem;">
+      <label class="output-label" for="compressed-output">Compressed Output (Base64)</label>
+      <textarea id="compressed-output" readonly placeholder="Compressed output will appear here..." aria-live="polite"></textarea>
+      <button id="copy-compressed" type="button" disabled>Copy Compressed Text</button>
+    </div>
+  </section>
+
+  <section id="decompress-section" class="card" aria-labelledby="decompress-label">
+    <h2 id="decompress-label" style="margin-top:0;">Decompress</h2>
+    <label for="text-to-decompress">Paste compressed base64 string</label>
+    <textarea id="text-to-decompress" placeholder="Paste compressed text here..."></textarea>
+    <button id="btn-decompress" type="button" disabled>Decompress</button>
+
+    <div class="output-container" style="margin-top:1.5rem;">
+      <label class="output-label" for="decompressed-output">Decompressed Output</label>
+      <textarea id="decompressed-output" readonly placeholder="Decompressed output will appear here..." aria-live="polite"></textarea>
+      <button id="copy-decompressed" type="button" disabled>Copy Decompressed Text</button>
+    </div>
+  </section>
+
+  <footer class="footer-note" role="contentinfo">
+    FileSqueezer – Advanced compression utility powered by LZ-String &copy; 2024
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+<script>
+  (function(){
+    const textToCompress = document.getElementById('text-to-compress');
+    const fileInput = document.getElementById('file-to-compress');
+    const btnCompress = document.getElementById('btn-compress');
+    const compressedOutput = document.getElementById('compressed-output');
+    const copyCompressed = document.getElementById('copy-compressed');
+
+    const textToDecompress = document.getElementById('text-to-decompress');
+    const btnDecompress = document.getElementById('btn-decompress');
+    const decompressedOutput = document.getElementById('decompressed-output');
+    const copyDecompressed = document.getElementById('copy-decompressed');
+
+    // Enable Compress button only if text or file input is provided
+    function updateCompressButtonState() {
+      btnCompress.disabled = !textToCompress.value.trim() && !fileInput.files.length;
+    }
+    textToCompress.addEventListener('input', () => {
+      // Clear file input when typing text
+      if(textToCompress.value.trim()) {
+        fileInput.value = "";
+      }
+      updateCompressButtonState();
+    });
+    fileInput.addEventListener('change', () => {
+      // Clear text area if file chosen
+      if(fileInput.files.length) {
+        textToCompress.value = "";
+      }
+      updateCompressButtonState();
+    });
+
+    // Enable Decompress button only if text-to-decompress has value
+    textToDecompress.addEventListener('input', () => {
+      btnDecompress.disabled = !textToDecompress.value.trim();
+    });
+
+    // Copy utility function
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => button.textContent = originalText, 1500);
+      }, () => {
+        alert('Failed to copy. Please copy manually.');
+      });
+    }
+
+    copyCompressed.addEventListener('click', () => {
+      copyToClipboard(compressedOutput.value, copyCompressed);
+    });
+    copyDecompressed.addEventListener('click', () => {
+      copyToClipboard(decompressedOutput.value, copyDecompressed);
+    });
+
+    btnCompress.addEventListener('click', () => {
+      copyCompressed.disabled = true;
+      compressedOutput.value = '';
+      if(textToCompress.value.trim()) {
+        try {
+          const compressed = LZString.compressToBase64(textToCompress.value);
+          compressedOutput.value = compressed;
+          copyCompressed.disabled = false;
+        } catch (e) {
+          compressedOutput.value = 'Compression failed: ' + e.message;
+          copyCompressed.disabled = true;
+        }
+      } else if(fileInput.files.length) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const compressed = LZString.compressToBase64(e.target.result);
+            compressedOutput.value = compressed;
+            copyCompressed.disabled = false;
+          } catch (e) {
+            compressedOutput.value = 'Compression failed: ' + e.message;
+            copyCompressed.disabled = true;
+          }
+        };
+        reader.onerror = function() {
+          compressedOutput.value = 'Error reading file.';
+          copyCompressed.disabled = true;
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    btnDecompress.addEventListener('click', () => {
+      copyDecompressed.disabled = true;
+      decompressedOutput.value = '';
+      const compressedText = textToDecompress.value.trim();
+      try {
+        const decompressed = LZString.decompressFromBase64(compressedText);
+        if(decompressed === null) {
+          decompressedOutput.value = 'Decompression failed: Invalid input or corrupted data.';
+          copyDecompressed.disabled = true;
+        } else {
+          decompressedOutput.value = decompressed;
+          copyDecompressed.disabled = false;
+        }
+      } catch (e) {
+        decompressedOutput.value = 'Decompression failed: ' + e.message;
+        copyDecompressed.disabled = true;
+      }
+    });
+  
+  })();
+</script>
+
+</body>
+</html>
+
