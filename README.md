@@ -1,19 +1,14 @@
 `README.md`
 ```md
 # 🚀 FileSqueezer
-
-> Effortless Compression & Decompression for Your Files and Text 💨📦
-
----
-
-![FileSqueezer Logo](https://cdn-icons-png.flaticon.com/512/2089/2089679.png)  
+> Effortless Compression & Decompression for Your Files and Text 💨📦  
 *Modern & sleek compression tool built for developers and enthusiasts.*
 
 ---
 
 ## ✨ Features
 
-- **Lossless Compression & Decompression** using the powerful [LZ-String](https://pieroxy.net/blog/pages/lz-string/index.html) algorithm  
+- **Lossless Compression & Decompression** using the powerful [LZ-String] algorithm  
 - Compress plain text or upload files for instant compression  
 - Decompress base64 compressed strings back to original text  
 - Responsive, minimalistic, and clean interface focused on usability  
